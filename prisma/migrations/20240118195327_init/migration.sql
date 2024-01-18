@@ -43,6 +43,7 @@ CREATE TABLE "songs" (
     "title" TEXT NOT NULL,
     "duration" TEXT NOT NULL,
     "albumId" TEXT NOT NULL,
+    "artistId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -68,6 +69,9 @@ CREATE UNIQUE INDEX "artists_email_key" ON "artists"("email");
 
 -- AddForeignKey
 ALTER TABLE "songs" ADD CONSTRAINT "songs_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "albums"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "songs" ADD CONSTRAINT "songs_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "artists"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "albumsArtists" ADD CONSTRAINT "albumsArtists_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "albums"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
