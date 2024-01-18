@@ -11,9 +11,66 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  role     UserRole @default(user)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Album {
+  id          String   @id @default(uuid())
+  title       String
+  releaseYear String
+  genre       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  artists AlbumArtist[]
+  songs   Song[]
+
+  @@map("albums")
+}
+
+model Artist {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  albums AlbumArtist[]
+
+  @@map("artists")
+}
+
+model Song {
+  id        String   @id @default(uuid())
+  title     String
+  duration  String
+  albumId   String
+  album     Album    @relation(fields: [albumId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("songs")
+}
+
+model AlbumArtist {
+  id        String   @id @default(uuid())
+  albumId   String
+  album     Album    @relation(fields: [albumId], references: [id])
+  artistId  String
+  artist    Artist   @relation(fields: [artistId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("albumsArtists")
 }
 
 enum UserRole {
