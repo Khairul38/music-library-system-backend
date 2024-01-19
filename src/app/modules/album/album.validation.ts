@@ -18,7 +18,7 @@ export const createAlbumZodSchema = z.object({
         }),
       }),
       {
-        required_error: "Artists is required",
+        required_error: "artists is required",
       }
     ),
   }),

@@ -158,22 +158,24 @@ export const updateSingleAlbumToDB = async (
       throw new ApiError(httpStatus.BAD_REQUEST, "Unable to update album");
     }
 
-    const result2 = await transactionClient.albumArtist.deleteMany({
-      where: {
-        albumId: id,
-      },
-    });
+    if (payload.artists) {
+      const result2 = await transactionClient.albumArtist.deleteMany({
+        where: {
+          albumId: id,
+        },
+      });
 
-    if (!result2) {
-      throw new ApiError(httpStatus.BAD_REQUEST, "Unable to update album");
+      if (!result2) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "Unable to update album");
+      }
+
+      await transactionClient.albumArtist.createMany({
+        data: artists.map(ob => ({
+          albumId: result1.id,
+          artistId: ob.artistId,
+        })),
+      });
     }
-
-    await transactionClient.albumArtist.createMany({
-      data: artists.map(ob => ({
-        albumId: result1.id,
-        artistId: ob.artistId,
-      })),
-    });
 
     return result1;
   });
@@ -201,6 +203,7 @@ export const deleteSingleAlbumFromDB = async (
   id: string
 ): Promise<Partial<Album> | undefined> => {
   const deleteAlbum = await prisma.$transaction(async transactionClient => {
+    // Delete all albumArtist related to the album
     const result1 = await transactionClient.albumArtist.deleteMany({
       where: {
         albumId: id,
@@ -210,13 +213,26 @@ export const deleteSingleAlbumFromDB = async (
     if (!result1) {
       throw new ApiError(httpStatus.BAD_REQUEST, "Unable to delete album");
     }
-    const result2 = await transactionClient.album.delete({
+
+    // Delete all song related to the album
+    const result2 = await transactionClient.song.deleteMany({
+      where: {
+        albumId: id,
+      },
+    });
+
+    if (!result2) {
+      throw new ApiError(httpStatus.BAD_REQUEST, "Unable to delete album");
+    }
+
+    // Finally delete album
+    const result3 = await transactionClient.album.delete({
       where: {
         id,
       },
     });
 
-    return result2;
+    return result3;
   });
 
   if (deleteAlbum) {

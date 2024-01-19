@@ -63,12 +63,14 @@ export const getAllUserFromDB = async (
   );
 
   const total = await prisma.user.count();
+  const totalPage = Number(total) / Number(size);
 
   return {
     meta: {
       total,
       page,
       size,
+      totalPage: Math.ceil(totalPage),
     },
     data: resultWithoutPassword,
   };
