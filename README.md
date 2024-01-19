@@ -1,6 +1,6 @@
-# Music Library System
+# Welcome To Music Library System
 
-This is the documentation for the Authentication and Core Service component of the Music Library System. It is built using Node.js, TypeScript, Express.js, Zod validation, PostgreSQL and Prisma.
+This is the documentation for the Music Library System's Authentication and Core Service component. It is built using Node.js, TypeScript, Express.js, Zod validation, PostgreSQL, and Prisma.
 
 <!-- HOW TO RUN -->
 
@@ -53,7 +53,7 @@ Please follow the below instructions to run this repository on your local machin
 
 ## Application Routes
 
-### Backend Live Link: http://localhost:5000/
+### Backend Live Link: https://music-library-system-backend.vercel.app/
 
 ### Postman API Documentation: [Click Here](https://documenter.getpostman.com/view/19250883/2s9YsT5oC2)
 
